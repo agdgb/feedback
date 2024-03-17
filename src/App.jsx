@@ -7,8 +7,11 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 
 function App () {
   const [feedbacks, setFeedbacks] = useState([])
+  const [success, setSuccess] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   const readRecords = async () => {
+    setIsLoading(true)
     try {
       const collectionRef = collection(db, 'feedbacks')
       const q = query(collectionRef, orderBy('date', 'desc'))
@@ -20,8 +23,12 @@ function App () {
       })
       records.length > 0 ? setFeedbacks(records) : []
       console.log('Records:', feedbacks)
+      setSuccess(true)
+      setIsLoading(false)
     } catch (error) {
       console.error('Error fetching records:', error)
+      setIsLoading(false)
+      setSuccess(false)
     }
   }
   useEffect(() => {
@@ -47,7 +54,14 @@ function App () {
         <Routes>
           <Route
             path='/list'
-            element={<Feedbacks feedbacks={feedbacks} onRetry={readRecords} />}
+            element={
+              <Feedbacks
+                isLoading={isLoading}
+                success={success}
+                feedbacks={feedbacks}
+                onRetry={readRecords}
+              />
+            }
           />
           <Route path='/' element={<Feedback />} />
         </Routes>

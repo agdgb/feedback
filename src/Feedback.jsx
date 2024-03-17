@@ -21,7 +21,7 @@ const Feedback = () => {
       console.log('Document written with ID:', newDocRef.id)
       setMessage(`Thank you for your feedback! ${newDocRef.id}`)
     } catch (error) {
-      setMessage('Unknown error occured!')
+      setMessage('There was an error submitting you feedback!')
       console.error('Error adding document:', error)
       // setMessage(error)
     }
@@ -47,6 +47,7 @@ const Feedback = () => {
         Tell us what you want from
         <span className='text-cyan-600 text-2xl'> company XYZ!</span>
       </p>
+      {message && <p className='text-white dark:text-cyan-600'>{message}</p>}
       <form onSubmit={handleSubmit} className='space-y-4'>
         <div>
           <label
@@ -60,6 +61,7 @@ const Feedback = () => {
             placeholder='Your feedback here...'
             value={feedback}
             onChange={handleInputChange}
+            required
             rows={6}
           ></textarea>
         </div>
@@ -71,7 +73,6 @@ const Feedback = () => {
             Submit Feedback
           </button>
         </div>
-        {message && <p>{message}</p>}
       </form>
     </div>
     // <div className='max-w-md mx-auto'>
